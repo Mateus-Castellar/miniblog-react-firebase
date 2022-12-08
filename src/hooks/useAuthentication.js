@@ -1,12 +1,12 @@
-import {db} from "../firebase/config";
+import { db } from "../firebase/config";
 
-import{
+import {
     getAuth,
     createUserWithEmailAndPassword,
-    SignInWithEmailAndPassword,
+    signInWithEmailAndPassword,
     updateProfile,
     signOut
-} from  'firebase/auth'
+} from 'firebase/auth'
 
 import { useState, useEffect } from 'react'
 
@@ -19,8 +19,8 @@ export const useAuthentication = () => {
 
     const auth = getAuth();
 
-    function checkIfIsCancelled(){
-        if(cancelled){
+    function checkIfIsCancelled() {
+        if (cancelled) {
             return;
         }
     };
@@ -31,24 +31,24 @@ export const useAuthentication = () => {
         setError(null);
 
         try {
-            const {user} = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
 
-            await updateProfile(user,{
+            await updateProfile(user, {
                 displayName: data.displayName
             });
 
             setLoading(false);
             return user;
-            
+
         } catch (error) {
             let systemErrorMessage;
 
-            if(error.message.includes("Password")){
+            if (error.message.includes("Password")) {
                 systemErrorMessage = "A senha precisa conter ao menos 6 caracteres!";
             }
-            else if(error.message.includes("email-already")){
+            else if (error.message.includes("email-already")) {
                 systemErrorMessage = "Email já cadastrado!";
-            }else{
+            } else {
                 systemErrorMessage = "Ocorreu um erro, tente novamente mais tarde!";
             }
 
@@ -62,10 +62,35 @@ export const useAuthentication = () => {
         signOut(auth);
     };
 
+    const login = async (data) => {
+        checkIfIsCancelled();
+        setLoading(true);
+        setError(null);
+
+        try {
+            await signInWithEmailAndPassword(auth, data.email, data.password);
+            setLoading(false);
+        } catch (error) {
+            let systemErrorMessage;
+
+            if (error.message.includes("user-not-found")) {
+                systemErrorMessage = "Usuário não encontrado";
+            }
+            else if (error.message.includes("INVALID_PASSWORD")) {
+                systemErrorMessage = "Senha incorreta";
+            } else {
+                systemErrorMessage = "Ocorreu um erro, tente novamente mais tarde!";
+            }
+
+            setError(systemErrorMessage);
+            setLoading(false);
+        }
+    };
+
     //limpar as dependencias (mais performace)
     useEffect(() => {
         return () => setCancelled(true);
-    },[]);
+    }, []);
 
     return {
         auth,
@@ -73,5 +98,6 @@ export const useAuthentication = () => {
         error,
         loading,
         logout,
+        login,
     };
 };
