@@ -2,7 +2,9 @@ import styles from "./Home.module.css";
 
 const Home = () => {
   return (
-    <div>Home Page</div>
+    <div className={styles.home}>
+      <h3>Home Page - Postagens</h3>
+    </div>
   )
 }
 

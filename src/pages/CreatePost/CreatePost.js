@@ -1,9 +1,74 @@
 import styles from "./CreatePost.module.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthValue } from "../../context/authContext";
+import { useInsertDocument } from "../../hooks/useInsertDocument";
 
 const CreatePost = () => {
+
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
+  const [body, setBody] = useState("");
+  const [tags, setTags] = useState([]);
+  const [formError, setFormError] = useState("");
+
+  const {user} = useAuthValue();
+  const {insertDocument, response} = useInsertDocument("posts");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFormError("");
+
+    //validar urlImage
+
+    //criar lista de tags (array)
+
+    //checar valores
+
+    insertDocument({
+      title,
+      image,
+      body,
+      tags,
+      uid: user.uid,
+      createdBy: user.displayName
+    });
+
+    //redirecionar para HomePage
+
+  };
+
   return (
-    <div>
-        <h1>CreatePost</h1>
+    <div className={styles.create_post}>
+      <h2>Criar Post</h2>
+      <p>Escreva sobre o que quiser e compartilhe o seu conhecimento!</p>
+      <form onSubmit={handleSubmit}>
+        
+        <label>
+          <span>Título:</span>
+          <input type="text" name="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="título do post" required/>
+        </label>
+
+        <label>
+          <span>Url Imagem:</span>
+          <input type="text" name="image" value={image} onChange={(e) => setImage(e.target.value)} placeholder="imagem do post" required/>
+        </label>
+
+        <label>
+          <span>Conteudo:</span>
+          <textarea name="body" required value={body} placeholder="insira o conteudo do post" onChange={(e) => setBody(e.target.value)}></textarea>
+        </label>
+
+        <label>
+          <span>Tags:</span>
+          <input type="text" name="tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="insira as tags separadas por virgulas" required/>
+        </label>
+
+        {!response.loading && <button className="btn">Criar Post</button>}
+        {response.loading && <button className="btn" disabled>Aguarde...</button>}
+        {response.error && <p className="error">{response.error}</p>}
+
+      </form>
     </div>
   )
 }
