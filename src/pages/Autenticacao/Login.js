@@ -17,6 +17,13 @@ const Login = () => {
     setPassword("");
   };
 
+  //sempre quando o state "authEror" sofrer alteração executa a function
+  useEffect(() => {
+    if (authError) {
+      setError(authError);
+    }
+  }, [authError]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 

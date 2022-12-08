@@ -37,9 +37,14 @@ const Register = () => {
       return;
     };
 
+    if(password.length < 6){
+      setError("as senhas precisam conter no mínimo 6 caracteres!");
+      return;
+    }
+
     const response = await createUser(user);
 
-    if(!response.error){
+    if(response){
       clearStatesValues();
     }
   };

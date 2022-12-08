@@ -71,6 +71,7 @@ export const useAuthentication = () => {
             await signInWithEmailAndPassword(auth, data.email, data.password);
             setLoading(false);
         } catch (error) {
+
             let systemErrorMessage;
 
             if (error.message.includes("user-not-found")) {
