@@ -4,9 +4,8 @@ import { useAuthentication } from "../hooks/useAuthentication";
 import { useAuthValue } from "../context/authContext";
 
 const Navbar = () => {
-
   const { user } = useAuthValue();
-  const {logout} = useAuthentication();
+  const { logout } = useAuthentication();
 
   return (
     <nav className={styles.navbar}>
@@ -16,17 +15,32 @@ const Navbar = () => {
 
       <ul className={styles.links_list}>
         <li>
-          <NavLink to="/" className={({ isActive }) => (isActive ? styles.active : "")}>Home</NavLink>
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
+            Home
+          </NavLink>
         </li>
 
         {/* user nao logado */}
         {!user && (
           <>
             <li>
-              <NavLink to="/login" className={({ isActive }) => (isActive ? styles.active : "")}>Entrar</NavLink>
+              <NavLink
+                to="/login"
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                Entrar
+              </NavLink>
             </li>
             <li>
-              <NavLink to="/register" className={({ isActive }) => (isActive ? styles.active : "")}>Cadastrar</NavLink>
+              <NavLink
+                to="/register"
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                Cadastrar
+              </NavLink>
             </li>
           </>
         )}
@@ -35,16 +49,31 @@ const Navbar = () => {
         {user && (
           <>
             <li>
-              <NavLink to="/posts/create" className={({ isActive }) => (isActive ? styles.active : "")}>Novo Post</NavLink>
+              <NavLink
+                to="/posts/create"
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                Novo Post
+              </NavLink>
             </li>
             <li>
-              <NavLink to="/dashboard" className={({ isActive }) => (isActive ? styles.active : "")}>Dashboard</NavLink>
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                Dashboard
+              </NavLink>
             </li>
           </>
         )}
 
         <li>
-          <NavLink to="/about" className={({ isActive }) => (isActive ? styles.active : "")}>Sobre</NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
+            Sobre
+          </NavLink>
         </li>
 
         {user && (
@@ -54,7 +83,7 @@ const Navbar = () => {
         )}
       </ul>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

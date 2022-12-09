@@ -2,40 +2,37 @@ import { useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 
-export const useFetchDocument = (docCollection,id) => {
+export const useFetchDocument = (docCollection, id) => {
+  const [document, setDocument] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const [cancelled, setCancelled] = useState(false);
 
-    const [document, setDocument] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(null);
-    const [cancelled, setCancelled] = useState(false);
+  useEffect(() => {
+    async function loadDocument() {
+      if (cancelled) return;
 
-    useEffect(() => {
-        async function loadDocument() {
-            
-            if (cancelled) return;
+      setLoading(true);
 
-            setLoading(true);
+      try {
+        const docRef = await doc(db, docCollection, id);
+        const docSnap = await getDoc(docRef);
 
-            try {
-                const docRef = await doc(db, docCollection, id);
-                const docSnap = await getDoc(docRef);
+        setDocument(docSnap.data());
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+        setLoading(false);
+      }
+    }
 
-                setDocument(docSnap.data());
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-                setError(error.message);
-                setLoading(false);
-            }
-        }
+    loadDocument();
+  }, [docCollection, id, cancelled]);
 
-        loadDocument();
+  useEffect(() => {
+    return () => setCancelled(true);
+  }, []);
 
-    }, [docCollection, id, cancelled]);
-
-    useEffect(() => {
-        return () => setCancelled(true);
-    }, []);
-
-    return {document: document, loading, error};
+  return { document: document, loading, error };
 };

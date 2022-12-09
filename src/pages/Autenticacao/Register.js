@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useAuthentication } from "../../hooks/useAuthentication";
 
 const Register = () => {
-
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,10 +10,9 @@ const Register = () => {
   const [error, setError] = useState("");
 
   //hooks
-  const {createUser, error: authError, loading} = useAuthentication();
+  const { createUser, error: authError, loading } = useAuthentication();
 
-
-  const clearStatesValues = () =>{
+  const clearStatesValues = () => {
     setDisplayName("");
     setEmail("");
     setPassword("");
@@ -35,23 +33,23 @@ const Register = () => {
     if (password !== confirmPassword) {
       setError("as senhas precisam ser iguais!");
       return;
-    };
+    }
 
-    if(password.length < 6){
+    if (password.length < 6) {
       setError("as senhas precisam conter no mínimo 6 caracteres!");
       return;
     }
 
     const response = await createUser(user);
 
-    if(response){
+    if (response) {
       clearStatesValues();
     }
   };
 
   //sempre quando o state "authEror" sofrer alteração executa a function
   useEffect(() => {
-    if(authError){
+    if (authError) {
       setError(authError);
     }
   }, [authError]);
@@ -63,30 +61,62 @@ const Register = () => {
       <form onSubmit={handleSubmit}>
         <label>
           <span>Nome:</span>
-          <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} name="displayName" required placeholder="nome do usário" />
+          <input
+            type="text"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            name="displayName"
+            required
+            placeholder="nome do usário"
+          />
         </label>
 
         <label>
           <span>Email:</span>
-          <input type="email" onChange={(e) => setEmail(e.target.value)} name="email" value={email} required placeholder="email do uusário" />
+          <input
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={email}
+            required
+            placeholder="email do uusário"
+          />
         </label>
 
         <label>
           <span>Senha:</span>
-          <input type="password" onChange={(e) => setPassword(e.target.value)} name="password" value={password} required placeholder="insira sua senha" />
+          <input
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={password}
+            required
+            placeholder="insira sua senha"
+          />
         </label>
 
         <label>
           <span>Confirme sua senha:</span>
-          <input type="password" onChange={(e) => setConfirmPassword(e.target.value)} name="confirPassword" value={confirmPassword} required placeholder="confirme a sua senha" />
+          <input
+            type="password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            name="confirPassword"
+            value={confirmPassword}
+            required
+            placeholder="confirme a sua senha"
+          />
         </label>
 
         {!loading && <button className="btn">Cadastrar-se</button>}
-        {loading && <button className="btn" disabled>Aguarde...</button>}
+        {loading && (
+          <button className="btn" disabled>
+            Aguarde...
+          </button>
+        )}
         {error && <p className="error">{error}</p>}
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

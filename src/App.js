@@ -1,9 +1,9 @@
-import './App.css';
-import { onAuthStateChanged } from 'firebase/auth';
-import { useState, useEffect } from 'react';
-import { useAuthentication } from './hooks/useAuthentication';
+import "./App.css";
+import { onAuthStateChanged } from "firebase/auth";
+import { useState, useEffect } from "react";
+import { useAuthentication } from "./hooks/useAuthentication";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from './context/authContext';
+import { AuthProvider } from "./context/authContext";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Navbar from "./components/Navbar";
@@ -13,10 +13,9 @@ import Register from "./pages/Autenticacao/Register";
 import CreatePost from "./pages/CreatePost/CreatePost";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Search from "./pages/Search/Search";
-import Post from './pages/Post/Post';
+import Post from "./pages/Post/Post";
 
 function App() {
-
   const [user, setUser] = useState(undefined);
   const { auth } = useAuthentication();
 
@@ -26,11 +25,10 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
-
-  }, [auth])
+  }, [auth]);
 
   if (loadingUser) {
-    return <p>Carregando...</p>
+    return <p>Carregando...</p>;
   }
 
   return (
@@ -44,12 +42,27 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/posts/:id" element={<Post />} />
-              <Route path="/search" element={<Search/>} />
-              <Route path="/login" element={!user ? <Login/> : <Navigate to="/"/>} />
-              <Route path="/register" element={!user ? <Register/> : <Navigate to="/"/>}/>
-              <Route path="/posts/create" element={user ? <CreatePost/> : <Navigate to="/login"/>}  />
-              <Route path="/dashboard" element={user ? <Dashboard/> : <Navigate to="/login"/>}  />
-              <Route path="/dashboard" element={user ? <Dashboard/> : <Navigate to="/login"/>}  />
+              <Route path="/search" element={<Search />} />
+              <Route
+                path="/login"
+                element={!user ? <Login /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/register"
+                element={!user ? <Register /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/posts/create"
+                element={user ? <CreatePost /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/dashboard"
+                element={user ? <Dashboard /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/dashboard"
+                element={user ? <Dashboard /> : <Navigate to="/login" />}
+              />
             </Routes>
           </div>
           <Footer />
